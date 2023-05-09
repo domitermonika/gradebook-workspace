@@ -55,6 +55,11 @@ import org.osgi.service.component.annotations.Component;
 )
 public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 
+	@Override
+	public Assignment addAssignment(Assignment assignment) {
+		throw new UnsupportedOperationException("Not supported.");
+	}
+
 	public Assignment addAssignment(
 			long groupId, String title, String description, Date dueDate,
 			ServiceContext serviceContext)
@@ -121,6 +126,11 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 	public long getAssignmentsCountByKeywords(long groupId, String keywords) {
 		return assignmentLocalService.dynamicQueryCount(
 			getKeywordSearchDynamicQuery(groupId, keywords));
+	}
+
+	@Override
+	public Assignment updateAssignment(Assignment assignment) {
+		throw new UnsupportedOperationException("Not supported.");
 	}
 
 	public Assignment updateAssignment(
