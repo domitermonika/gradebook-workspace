@@ -85,4 +85,24 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		return super.addAssignment(assignment);
 	}
 
+	public Assignment updateAssignment(
+			long assignmentId, String title, String description, Date dueDate,
+			ServiceContext serviceContext)
+			throws PortalException {
+
+		// Get the Assignment by id
+
+		Assignment assignment = getAssignment(assignmentId);
+
+		// Set updated fields and modification date
+
+		assignment.setModifiedDate(new Date());
+		assignment.setTitle(title);
+		assignment.setDescription(description);
+		assignment.setDueDate(dueDate);
+		assignment = super.updateAssignment(assignment);
+
+		return assignment;
+	}
+
 }
