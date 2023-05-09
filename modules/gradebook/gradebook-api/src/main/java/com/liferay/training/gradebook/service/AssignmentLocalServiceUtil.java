@@ -59,6 +59,16 @@ public class AssignmentLocalServiceUtil {
 		return getService().addAssignment(assignment);
 	}
 
+	public static Assignment addAssignment(
+			long groupId, String title, String description,
+			java.util.Date dueDate,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().addAssignment(
+			groupId, title, description, dueDate, serviceContext);
+	}
+
 	/**
 	 * Creates a new assignment with the primary key. Does not add the assignment to the database.
 	 *
@@ -228,6 +238,24 @@ public class AssignmentLocalServiceUtil {
 		return getService().getAssignment(assignmentId);
 	}
 
+	public static List<Assignment> getAssignmentByGroupId(long groupId) {
+		return getService().getAssignmentByGroupId(groupId);
+	}
+
+	public static List<Assignment> getAssignmentByGroupId(
+		long groupId, int start, int end) {
+
+		return getService().getAssignmentByGroupId(groupId, start, end);
+	}
+
+	public static List<Assignment> getAssignmentByGroupId(
+		long groupId, int start, int end,
+		OrderByComparator<Assignment> orderByComparator) {
+
+		return getService().getAssignmentByGroupId(
+			groupId, start, end, orderByComparator);
+	}
+
 	/**
 	 * Returns a range of all the assignments.
 	 *
@@ -243,6 +271,14 @@ public class AssignmentLocalServiceUtil {
 		return getService().getAssignments(start, end);
 	}
 
+	public static List<Assignment> getAssignmentsByKeywords(
+		long groupId, String keywords, int start, int end,
+		OrderByComparator<Assignment> orderByComparator) {
+
+		return getService().getAssignmentsByKeywords(
+			groupId, keywords, start, end, orderByComparator);
+	}
+
 	/**
 	 * Returns the number of assignments.
 	 *
@@ -250,6 +286,12 @@ public class AssignmentLocalServiceUtil {
 	 */
 	public static int getAssignmentsCount() {
 		return getService().getAssignmentsCount();
+	}
+
+	public static long getAssignmentsCountByKeywords(
+		long groupId, String keywords) {
+
+		return getService().getAssignmentsCountByKeywords(groupId, keywords);
 	}
 
 	public static
@@ -289,6 +331,16 @@ public class AssignmentLocalServiceUtil {
 	 */
 	public static Assignment updateAssignment(Assignment assignment) {
 		return getService().updateAssignment(assignment);
+	}
+
+	public static Assignment updateAssignment(
+			long assignmentId, String title, String description,
+			java.util.Date dueDate,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().updateAssignment(
+			assignmentId, title, description, dueDate, serviceContext);
 	}
 
 	public static AssignmentLocalService getService() {
