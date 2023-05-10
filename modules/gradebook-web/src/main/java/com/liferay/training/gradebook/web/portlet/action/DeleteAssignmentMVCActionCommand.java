@@ -45,9 +45,15 @@ public class DeleteAssignmentMVCActionCommand extends BaseMVCActionCommand {
 
 			_assignmentService.deleteAssignment(assignmentId);
 
+			// Set success message.
+
+			SessionMessages.add(actionRequest, "assignmentDeleted");
 		}
 		catch (PortalException pe) {
-			pe.printStackTrace();
+
+			// Set error messages from the service layer.
+
+			SessionErrors.add(actionRequest, "serviceErrorDetails", pe);
 		}
 	}
 

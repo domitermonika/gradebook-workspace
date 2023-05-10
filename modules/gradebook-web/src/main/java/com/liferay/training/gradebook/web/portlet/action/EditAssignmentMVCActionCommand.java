@@ -1,12 +1,12 @@
 package com.liferay.training.gradebook.web.portlet.action;
 
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.training.gradebook.exception.AssignmentValidationException;
 import com.liferay.training.gradebook.model.Assignment;
@@ -48,14 +48,11 @@ public class EditAssignmentMVCActionCommand extends BaseMVCActionCommand {
 		// Get parameters from the request.
 
 		long assignmentId = ParamUtil.getLong(actionRequest, "assignmentId");
-		String title = ParamUtil.getString(
-			actionRequest, "title", StringPool.BLANK);
+		String title = ParamUtil.getString(actionRequest, "title");
 		String description = ParamUtil.getString(
-			actionRequest, "description", StringPool.BLANK);
+			actionRequest, "description", null);
 
-		Date dueDate = ParamUtil.getDate(
-			actionRequest, "dueDate",
-			DateFormatFactoryUtil.getSimpleDateFormat("MM-dd-YYYY"));
+		Date dueDate = ParamUtil.getDate(actionRequest, "dueDate", null);
 
 		try {
 
@@ -63,14 +60,32 @@ public class EditAssignmentMVCActionCommand extends BaseMVCActionCommand {
 
 			_assignmentService.updateAssignment(
 				assignmentId, title, description, dueDate, serviceContext);
+
+			// Set the success message.
+
+			SessionMessages.add(actionRequest, "assignmentUpdated");
+
 			sendRedirect(actionRequest, actionResponse);
 		}
 		catch (AssignmentValidationException ave) {
+
+			// Get error messages from the service layer
+
+			ave.getErrors(
+			).forEach(
+				key -> SessionErrors.add(actionRequest, key)
+			);
+
 			ave.printStackTrace();
+
 			actionResponse.setRenderParameter(
 				"mvcRenderCommandName", MVCCommandNames.EDIT_ASSIGNMENT);
 		}
 		catch (PortalException pe) {
+
+			// Get error messages from the service layer.
+
+			SessionErrors.add(actionRequest, "serviceErrorDetails", pe);
 			pe.printStackTrace();
 			actionResponse.setRenderParameter(
 				"mvcRenderCommandName", MVCCommandNames.EDIT_ASSIGNMENT);
