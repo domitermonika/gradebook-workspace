@@ -23,6 +23,8 @@ import com.liferay.training.gradebook.service.base.AssignmentServiceBaseImpl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -46,12 +48,12 @@ import org.osgi.service.component.annotations.Component;
 public class AssignmentServiceImpl extends AssignmentServiceBaseImpl {
 
 	public Assignment addAssignment(
-			long groupId, String title, String description, Date dueDate,
-			ServiceContext serviceContext)
+			long groupId, Map<Locale, String> titleMap, String description,
+			Date dueDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		return assignmentLocalService.addAssignment(
-			groupId, title, description, dueDate, serviceContext);
+			groupId, titleMap, description, dueDate, serviceContext);
 	}
 
 	public Assignment deleteAssignment(long assignmentId)
@@ -88,12 +90,12 @@ public class AssignmentServiceImpl extends AssignmentServiceBaseImpl {
 	}
 
 	public Assignment updateAssignment(
-			long assignmentId, String title, String description, Date dueDate,
-			ServiceContext serviceContext)
+			long assignmentId, Map<Locale, String> titleMap, String description,
+			Date dueDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		return assignmentLocalService.updateAssignment(
-			assignmentId, title, description, dueDate, serviceContext);
+			assignmentId, titleMap, description, dueDate, serviceContext);
 	}
 
 }
