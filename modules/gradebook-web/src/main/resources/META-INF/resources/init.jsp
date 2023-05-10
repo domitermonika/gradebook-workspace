@@ -21,6 +21,8 @@
 <%@ page import="com.liferay.training.gradebook.model.Assignment"%>
 <%@ page import="com.liferay.training.gradebook.web.constants.MVCCommandNames"%>
 
+<%@ page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+
 <liferay-frontend:defineObjects />
 
 <liferay-theme:defineObjects />
