@@ -43,7 +43,16 @@
 				<%-- Title field. --%>
 
 				<aui:input name="title">
+					<aui:validator name="required" />
 
+					<%-- Custom AUI validator. --%>
+					<aui:validator errorMessage="error.assignment-title-format" name="custom">
+								function(val, fieldNode, ruleValue) {
+									var wordExpression =
+											new RegExp("^[^\\[\\]\\^$<>]*$");
+									return wordExpression.test(val);
+								}
+					</aui:validator>
 				</aui:input>
 
 				<%-- Description field. --%>
