@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.training.gradebook.exception.AssignmentValidationException;
 import com.liferay.training.gradebook.model.Assignment;
@@ -15,6 +16,8 @@ import com.liferay.training.gradebook.web.constants.GradebookPortletKeys;
 import com.liferay.training.gradebook.web.constants.MVCCommandNames;
 
 import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -48,7 +51,11 @@ public class EditAssignmentMVCActionCommand extends BaseMVCActionCommand {
 		// Get parameters from the request.
 
 		long assignmentId = ParamUtil.getLong(actionRequest, "assignmentId");
-		String title = ParamUtil.getString(actionRequest, "title");
+
+		// Use LocalizationUtil to get a localized parameter.
+
+		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, "title");
 		String description = ParamUtil.getString(
 			actionRequest, "description", null);
 
@@ -59,7 +66,7 @@ public class EditAssignmentMVCActionCommand extends BaseMVCActionCommand {
 			// Call the service to update the assignment
 
 			_assignmentService.updateAssignment(
-				assignmentId, title, description, dueDate, serviceContext);
+				assignmentId, titleMap, description, dueDate, serviceContext);
 
 			// Set the success message.
 
