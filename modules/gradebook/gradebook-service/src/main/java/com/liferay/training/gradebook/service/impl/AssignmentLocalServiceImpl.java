@@ -26,11 +26,13 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.training.gradebook.model.Assignment;
 import com.liferay.training.gradebook.service.base.AssignmentLocalServiceBaseImpl;
+import com.liferay.training.gradebook.validator.AssignmentValidator;
 
 import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The implementation of the assignment local service.
@@ -64,6 +66,10 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 			long groupId, String title, String description, Date dueDate,
 			ServiceContext serviceContext)
 		throws PortalException {
+
+		// Validate assignment parameters.
+
+		_assignmentValidator.validate(title, description, dueDate);
 
 		// Get group and user.
 
@@ -138,6 +144,10 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
+		// Validate assignment parameters.
+
+		_assignmentValidator.validate(title, description, dueDate);
+
 		// Get the Assignment by id
 
 		Assignment assignment = getAssignment(assignmentId);
@@ -173,5 +183,8 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 
 		return dynamicQuery;
 	}
+
+	@Reference
+	AssignmentValidator _assignmentValidator;
 
 }
