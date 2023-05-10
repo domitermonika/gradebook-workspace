@@ -1,5 +1,15 @@
 <%@ include file="../init.jsp" %>
 
+<liferay-ui:error key="serviceErrorDetails">
+	<liferay-ui:message
+		arguments='<%= SessionErrors.get(liferayPortletRequest, "serviceErrorDetails") %>'
+		key="error.assignment-service-error"
+	/>
+</liferay-ui:error>
+
+<liferay-ui:error key="assignmentTitleEmpty" message="error.assignment-title-empty" />
+<liferay-ui:error key="assignmentDescriptionEmpty" message="error.assignment-description-empty" />
+
 <%-- Generate add / edit action URL and set title. --%>
 
 <c:choose>
