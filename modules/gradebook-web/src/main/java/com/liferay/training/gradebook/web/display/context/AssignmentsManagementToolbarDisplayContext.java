@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.training.gradebook.web.constants.GradebookPortletKeys;
 import com.liferay.training.gradebook.web.constants.MVCCommandNames;
+import com.liferay.training.gradebook.web.internal.security.permission.resource.AssignmentTopLevelPermission;
 
 import java.util.List;
 
@@ -65,6 +66,15 @@ public class AssignmentsManagementToolbarDisplayContext
 	 * @return creation menu
 	 */
 	public CreationMenu getCreationMenu() {
+
+		// Check if user has permissions to add assignments.
+
+		if (!AssignmentTopLevelPermission.contains(
+				_themeDisplay.getPermissionChecker(),
+				_themeDisplay.getScopeGroupId(), "ADD_ENTRY")) {
+
+			return null;
+		}
 
 		// Create the menu.
 
