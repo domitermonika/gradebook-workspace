@@ -15,6 +15,7 @@ import com.liferay.training.gradebook.service.AssignmentService;
 import com.liferay.training.gradebook.web.constants.GradebookPortletKeys;
 import com.liferay.training.gradebook.web.constants.MVCCommandNames;
 import com.liferay.training.gradebook.web.display.context.AssignmentsManagementToolbarDisplayContext;
+import com.liferay.training.gradebook.web.internal.security.permission.resource.AssignmentPermission;
 
 import java.util.List;
 
@@ -54,9 +55,19 @@ public class ViewAssignmentsMVCRenderCommand implements MVCRenderCommand {
 
 		addManagementToolbarAttributes(renderRequest, renderResponse);
 
+		// Add permission checker.
+
+		renderRequest.setAttribute(
+			"assignmentPermission", _assignmentPermission);
+
 		return "/view.jsp";
 	}
 
+	@Reference
+	protected AssignmentPermission _assignmentPermission;
+
+	@Reference
+	protected AssignmentService _assignmentService;
 
 	/**
 	 * Adds assigment list related attributes to the request.
@@ -142,9 +153,6 @@ public class ViewAssignmentsMVCRenderCommand implements MVCRenderCommand {
 			"assignmentsManagementToolbarDisplayContext",
 			assignmentsManagementToolbarDisplayContext);
 	}
-
-    @Reference
-    protected AssignmentService _assignmentService;
 
 	@Reference
 	private Portal _portal;
