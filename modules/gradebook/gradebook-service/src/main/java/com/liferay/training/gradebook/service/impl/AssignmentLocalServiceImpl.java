@@ -92,6 +92,7 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		assignment.setCreateDate(serviceContext.getCreateDate(new Date()));
 		assignment.setDueDate(dueDate);
 		assignment.setDescription(description);
+		assignment.setGroupId(groupId);
 		assignment.setModifiedDate(serviceContext.getModifiedDate(new Date()));
 		assignment.setTitle(title);
 		assignment.setUserId(userId);
