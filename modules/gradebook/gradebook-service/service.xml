@@ -18,9 +18,11 @@
 		<column name="userName" type="String"></column>
 		<column name="createDate" type="Date"></column>
 		<column name="modifiedDate" type="Date"></column>
-		<column name="title" type="String"></column>
 		<column name="description" type="String"></column>
 		<column name="dueDate" type="Date"></column>
+
+		<!-- Localization Fields -->
+		<column localized="true" name="title" type="String"></column>
 
 		<!--	Order	-->
 		<order by="asc">

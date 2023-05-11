@@ -30,6 +30,8 @@ import com.liferay.training.gradebook.validator.AssignmentValidator;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -63,13 +65,13 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 	}
 
 	public Assignment addAssignment(
-			long groupId, String title, String description, Date dueDate,
-			ServiceContext serviceContext)
+			long groupId, Map<Locale, String> titleMap, String description,
+			Date dueDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Validate assignment parameters.
 
-		_assignmentValidator.validate(title, description, dueDate);
+		_assignmentValidator.validate(titleMap, description, dueDate);
 
 		// Get group and user.
 
@@ -94,7 +96,7 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		assignment.setDescription(description);
 		assignment.setGroupId(groupId);
 		assignment.setModifiedDate(serviceContext.getModifiedDate(new Date()));
-		assignment.setTitle(title);
+		assignment.setTitleMap(titleMap);
 		assignment.setUserId(userId);
 		assignment.setUserName(user.getScreenName());
 
@@ -141,13 +143,13 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 	}
 
 	public Assignment updateAssignment(
-			long assignmentId, String title, String description, Date dueDate,
-			ServiceContext serviceContext)
+			long assignmentId, Map<Locale, String> titleMap, String description,
+			Date dueDate, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Validate assignment parameters.
 
-		_assignmentValidator.validate(title, description, dueDate);
+		_assignmentValidator.validate(titleMap, description, dueDate);
 
 		// Get the Assignment by id
 
@@ -156,7 +158,7 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		// Set updated fields and modification date
 
 		assignment.setModifiedDate(new Date());
-		assignment.setTitle(title);
+		assignment.setTitleMap(titleMap);
 		assignment.setDescription(description);
 		assignment.setDueDate(dueDate);
 		assignment = super.updateAssignment(assignment);

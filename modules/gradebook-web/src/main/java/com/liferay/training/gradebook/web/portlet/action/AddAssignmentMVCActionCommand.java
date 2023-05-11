@@ -8,6 +8,7 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.training.gradebook.exception.AssignmentValidationException;
@@ -17,6 +18,8 @@ import com.liferay.training.gradebook.web.constants.GradebookPortletKeys;
 import com.liferay.training.gradebook.web.constants.MVCCommandNames;
 
 import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -51,8 +54,10 @@ public class AddAssignmentMVCActionCommand extends BaseMVCActionCommand {
 			Assignment.class.getName(), actionRequest);
 
 		// Get parameters from the request
+		// Use LocalizationUtil to get a localized parameter.
 
-		String title = ParamUtil.getString(actionRequest, "title");
+		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, "title");
 		String description = ParamUtil.getString(
 			actionRequest, "description", null);
 
@@ -63,7 +68,7 @@ public class AddAssignmentMVCActionCommand extends BaseMVCActionCommand {
 			// Call the service to add a new assignment.
 
 			_assignmentService.addAssignment(
-				themeDisplay.getScopeGroupId(), title, description, dueDate,
+				themeDisplay.getScopeGroupId(), titleMap, description, dueDate,
 				serviceContext);
 
 			// Set the success message
