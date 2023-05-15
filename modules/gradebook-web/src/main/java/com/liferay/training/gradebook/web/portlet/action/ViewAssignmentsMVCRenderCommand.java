@@ -4,12 +4,14 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.training.gradebook.model.Assignment;
 import com.liferay.training.gradebook.service.AssignmentService;
 import com.liferay.training.gradebook.web.constants.GradebookPortletKeys;
@@ -112,6 +114,10 @@ public class ViewAssignmentsMVCRenderCommand implements MVCRenderCommand {
 
 		String keywords = ParamUtil.getString(renderRequest, "keywords");
 
+		// Get the workflow status for the list.
+
+		int status = getAllowedWorkflowStatus(renderRequest);
+
 		// Call the service to get the list of assignments.
 
 		List<Assignment> assignments =
@@ -152,6 +158,33 @@ public class ViewAssignmentsMVCRenderCommand implements MVCRenderCommand {
 		renderRequest.setAttribute(
 			"assignmentsManagementToolbarDisplayContext",
 			assignmentsManagementToolbarDisplayContext);
+	}
+
+	/**
+	 * Returns workflow status current user is allowed to see.
+	 *
+	 * This simple example returns ANY status for company admin and
+	 * APPROVED for other users.
+	 *
+	 * @param renderRequest
+	 * @return
+	 */
+	private int getAllowedWorkflowStatus(RenderRequest renderRequest) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
+		int status;
+
+		if (permissionChecker.isCompanyAdmin()) {
+			status = WorkflowConstants.STATUS_ANY;
+		}
+		else {
+			status = WorkflowConstants.STATUS_APPROVED;
+		}
+
+		return status;
 	}
 
 	@Reference
