@@ -182,6 +182,21 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 	}
 
 	public List<Assignment> getAssignmentsByKeywords(
+		long groupId, String keywords, int start, int end, int status,
+		OrderByComparator<Assignment> orderByComparator) {
+
+		DynamicQuery assignmentQuery = getKeywordSearchDynamicQuery(
+			groupId, keywords);
+
+		if (status != WorkflowConstants.STATUS_ANY) {
+			assignmentQuery.add(RestrictionsFactoryUtil.eq("status", status));
+		}
+
+		return assignmentLocalService.dynamicQuery(
+			assignmentQuery, start, end, orderByComparator);
+	}
+
+	public List<Assignment> getAssignmentsByKeywords(
 		long groupId, String keywords, int start, int end,
 		OrderByComparator<Assignment> orderByComparator) {
 
@@ -193,6 +208,19 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 	public long getAssignmentsCountByKeywords(long groupId, String keywords) {
 		return assignmentLocalService.dynamicQueryCount(
 			getKeywordSearchDynamicQuery(groupId, keywords));
+	}
+
+	public long getAssignmentsCountByKeywords(
+		long groupId, String keywords, int status) {
+
+		DynamicQuery assignmentQuery = getKeywordSearchDynamicQuery(
+			groupId, keywords);
+
+		if (status != WorkflowConstants.STATUS_ANY) {
+			assignmentQuery.add(RestrictionsFactoryUtil.eq("status", status));
+		}
+
+		return assignmentLocalService.dynamicQueryCount(assignmentQuery);
 	}
 
 	@Override
