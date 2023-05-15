@@ -2,6 +2,7 @@ Bundle-Name: gradebook-api
 Bundle-SymbolicName: com.liferay.training.gradebook.api
 Bundle-Version: 1.0.0
 Export-Package:\
+    com.liferay.training.gradebook.configuration,\
 	com.liferay.training.gradebook.constants,\
 	com.liferay.training.gradebook.exception,\
 	com.liferay.training.gradebook.model,\
