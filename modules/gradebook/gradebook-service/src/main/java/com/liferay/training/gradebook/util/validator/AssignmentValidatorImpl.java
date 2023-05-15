@@ -1,8 +1,11 @@
 package com.liferay.training.gradebook.util.validator;
 
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.training.gradebook.configuration.GradebookSystemServiceConfiguration;
 import com.liferay.training.gradebook.exception.AssignmentValidationException;
 import com.liferay.training.gradebook.validator.AssignmentValidator;
 
@@ -12,12 +15,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 
 /**
  * @author Monika Domiter
  */
-@Component(immediate = true, service = AssignmentValidator.class)
+@Component(
+	configurationPid = "com.liferay.training.gradebook.configuration.GradebookSystemServiceConfiguration",
+	immediate = true, service = AssignmentValidator.class
+)
 public class AssignmentValidatorImpl implements AssignmentValidator {
 
 	/**
@@ -39,6 +47,14 @@ public class AssignmentValidatorImpl implements AssignmentValidator {
 		if (!isAssignmentValid(titleMap, description, dueDate, errors)) {
 			throw new AssignmentValidationException(errors);
 		}
+	}
+
+	@Activate
+	@Modified
+	private void activate(Map<String, Object> properties) {
+		_gradebookSystemServiceConfiguration =
+			ConfigurableUtil.createConfigurable(
+				GradebookSystemServiceConfiguration.class, properties);
 	}
 
 	/**
@@ -143,13 +159,40 @@ public class AssignmentValidatorImpl implements AssignmentValidator {
 
 			Locale defaultLocale = LocaleUtil.getSiteDefault();
 
-			if (Validator.isBlank(titleMap.get(defaultLocale))) {
+			String titleHTML = titleMap.get(defaultLocale);
+
+			if (Validator.isBlank(titleHTML)) {
 				errors.add("assignmentTitleEmpty");
+				result = false;
+			}
+
+			// Strip HTML tags from text.
+
+			String titleText = HtmlUtil.stripHtml(titleHTML);
+
+			if (Validator.isBlank(titleText)) {
+				errors.add("assignmentTitleEmpty");
+				result = false;
+			}
+
+			if (titleText.length() <
+					_gradebookSystemServiceConfiguration.titleMinLength()) {
+
+				errors.add("assignmentTitleTooShort");
+				result = false;
+			}
+			else if (titleText.length() >
+						_gradebookSystemServiceConfiguration.titleMaxLength()) {
+
+				errors.add("assignmentTitleTooLong");
 				result = false;
 			}
 		}
 
 		return result;
 	}
+
+	private volatile GradebookSystemServiceConfiguration
+		_gradebookSystemServiceConfiguration;
 
 }
