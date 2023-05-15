@@ -1,3 +1,5 @@
 dependencies {
+	compileOnly group: "biz.aQute.bnd", name: "annotation", version: "2.4.0"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.configuration.metatype.api", version: "6.1.0"
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 }
