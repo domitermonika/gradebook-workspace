@@ -22,7 +22,7 @@
 
 	<%-- Edit action. --%>
 
-	<c:if test="${assignmentPermission.contains(permissionChecker, assignment.assignmentId, 'UPDATE' )}">
+	<c:if test="${assignmentPermission.contains(permissionChecker, assignment.assignmentId, 'EDIT' )}">
 		<portlet:renderURL var="editAssignmentURL">
 			<portlet:param
 				name="mvcRenderCommandName"
