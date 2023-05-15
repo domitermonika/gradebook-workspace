@@ -14,6 +14,7 @@
 
 package com.liferay.training.gradebook.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -26,11 +27,16 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.training.gradebook.model.Assignment;
 import com.liferay.training.gradebook.service.base.AssignmentLocalServiceBaseImpl;
 import com.liferay.training.gradebook.validator.AssignmentValidator;
 
+import java.io.Serializable;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -102,6 +108,13 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		assignment.setUserId(userId);
 		assignment.setUserName(user.getScreenName());
 
+		// Set Status fields.
+
+		assignment.setStatus(WorkflowConstants.STATUS_DRAFT);
+		assignment.setStatusByUserId(userId);
+		assignment.setStatusByUserName(user.getFullName());
+		assignment.setStatusDate(serviceContext.getModifiedDate(null));
+
 		// Persist assignment to database.
 
 		assignment = super.addAssignment(assignment);
@@ -121,7 +134,9 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 
 		updateAsset(assignment, serviceContext);
 
-		return assignment;
+		// Start workflow instance and return the assignment.
+
+		return startWorkflowInstance(userId, assignment, serviceContext);
 	}
 
 	public Assignment deleteAssignment(Assignment assignment)
@@ -132,12 +147,18 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		resourceLocalService.deleteResource(
 			assignment, ResourceConstants.SCOPE_INDIVIDUAL);
 
-		// Delete the Assignment
-
 		// Delete the Asset resource.
 
 		assetEntryLocalService.deleteEntry(
 			Assignment.class.getName(), assignment.getAssignmentId());
+
+		// Delete the workflow resource.
+
+		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
+			assignment.getCompanyId(), assignment.getGroupId(),
+			Assignment.class.getName(), assignment.getAssignmentId());
+
+		// Delete the Assignment
 
 		return super.deleteAssignment(assignment);
 	}
@@ -205,6 +226,32 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		updateAsset(assignment, serviceContext);
 
 		return assignment;
+	}
+
+	protected Assignment startWorkflowInstance(
+			long userId, Assignment assignment, ServiceContext serviceContext)
+		throws PortalException {
+
+		Map<String, Serializable> workflowContext = new HashMap();
+		String userPortraitURL = StringPool.BLANK;
+		String userURL = StringPool.BLANK;
+
+		if (serviceContext.getThemeDisplay() != null) {
+			User user = userLocalService.getUser(userId);
+
+			userPortraitURL = user.getPortraitURL(
+				serviceContext.getThemeDisplay());
+			userURL = user.getDisplayURL(serviceContext.getThemeDisplay());
+		}
+
+		workflowContext.put(
+			WorkflowConstants.CONTEXT_USER_PORTRAIT_URL, userPortraitURL);
+		workflowContext.put(WorkflowConstants.CONTEXT_USER_URL, userURL);
+
+		return WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			assignment.getCompanyId(), assignment.getGroupId(), userId,
+			Assignment.class.getName(), assignment.getAssignmentId(),
+			assignment, serviceContext, workflowContext);
 	}
 
 	private DynamicQuery getKeywordSearchDynamicQuery(
