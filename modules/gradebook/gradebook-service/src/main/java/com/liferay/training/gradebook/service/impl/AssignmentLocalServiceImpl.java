@@ -228,6 +228,33 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 		return assignment;
 	}
 
+	public Assignment updateStatus(
+			long userId, long assignmentId, int status,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		User user = userLocalService.getUser(userId);
+		Assignment assignment = getAssignment(assignmentId);
+
+		assignment.setStatus(status);
+		assignment.setStatusByUserId(userId);
+		assignment.setStatusByUserName(user.getFullName());
+		assignment.setStatusDate(new Date());
+
+		assignmentPersistence.update(assignment);
+
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			assetEntryLocalService.updateVisible(
+				Assignment.class.getName(), assignmentId, true);
+		}
+		else {
+			assetEntryLocalService.updateVisible(
+				Assignment.class.getName(), assignmentId, false);
+		}
+
+		return assignment;
+	}
+
 	protected Assignment startWorkflowInstance(
 			long userId, Assignment assignment, ServiceContext serviceContext)
 		throws PortalException {
