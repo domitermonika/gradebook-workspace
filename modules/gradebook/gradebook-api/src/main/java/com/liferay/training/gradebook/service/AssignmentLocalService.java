@@ -302,4 +302,9 @@ public interface AssignmentLocalService
 			Date dueDate, ServiceContext serviceContext)
 		throws PortalException;
 
+	public Assignment updateStatus(
+			long userId, long assignmentId, int status,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException;
+
 }

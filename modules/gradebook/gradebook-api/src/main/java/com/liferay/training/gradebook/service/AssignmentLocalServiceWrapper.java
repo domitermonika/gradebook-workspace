@@ -398,6 +398,17 @@ public class AssignmentLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.training.gradebook.model.Assignment updateStatus(
+			long userId, long assignmentId, int status,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			   com.liferay.portal.kernel.exception.SystemException {
+
+		return _assignmentLocalService.updateStatus(
+			userId, assignmentId, status, serviceContext);
+	}
+
+	@Override
 	public AssignmentLocalService getWrappedService() {
 		return _assignmentLocalService;
 	}
