@@ -4,7 +4,7 @@
 <service-builder dependency-injector="ds" package-path="com.liferay.training.gradebook">
 	<author>Monika Domiter</author>
 	<namespace>Gradebook</namespace>
-	<entity local-service="true" name="Assignment">
+	<entity local-service="true" name="Assignment" remote-service="true">
 
 		<!--	PK fields	-->
 		<column name="assignmentId" primary="true" type="long"></column>
