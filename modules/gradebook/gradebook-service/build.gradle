@@ -1,4 +1,6 @@
 dependencies {
+	compileOnly group: "com.liferay", name: "com.liferay.portal.search.api"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.search.spi"
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 	compileOnly project(":modules:gradebook:gradebook-api")
 }

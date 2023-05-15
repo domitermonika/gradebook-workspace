@@ -23,6 +23,8 @@
 <%@ page import="com.liferay.training.gradebook.web.constants.MVCCommandNames"%>
 
 <%@ page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@ page import="com.liferay.asset.kernel.model.AssetRenderer"%>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys"%>
 
 <liferay-frontend:defineObjects />
 

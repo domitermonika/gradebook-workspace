@@ -20,6 +20,10 @@
 		<column name="modifiedDate" type="Date"></column>
 		<column name="description" type="String"></column>
 		<column name="dueDate" type="Date"></column>
+		<column name="status" type="int"></column>
+		<column name="statusByUserId" type="long"></column>
+		<column name="statusByUserName" type="String"></column>
+		<column name="statusDate" type="Date"></column>
 
 		<!-- Localization Fields -->
 		<column localized="true" name="title" type="String"></column>
