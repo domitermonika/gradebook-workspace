@@ -44,6 +44,15 @@
 					${entry.getTitle(locale)}
 				</aui:a>
 			</h4>
+
+			<h5 class="text-default">
+				<aui:workflow-status
+					markupView="lexicon"
+					showIcon="<%= true %>"
+					showLabel="<%= false %>"
+					status="${entry.status}"
+				/>
+			</h5>
 		</liferay-ui:search-container-column-text>
 
 		<liferay-ui:search-container-column-jsp
@@ -57,9 +66,9 @@
 		test='${assignmentsManagementToolbarDisplayContext.getDisplayStyle().equals("icon")}'
 	>
 
-		<%--
-			row.setCssClass("lfr-asset-item");
-		--%>
+		<%
+		row.setCssClass("lfr-asset-item");
+		%>
 
 		<liferay-ui:search-container-column-text>
 
@@ -81,6 +90,16 @@
 				</liferay-clay:vertical-card-sticker-bottom>
 
 				<liferay-clay:vertical-card-footer>
+
+					<%-- Workflow status --%>
+
+					<aui:workflow-status
+						markupView="lexicon"
+						showIcon="<%= false %>"
+						showLabel="<%= false %>"
+						status="${entry.status}"
+					/>
+
 					<div class="truncate-text">
 
 						<%-- Strip HTML --%>
@@ -109,6 +128,11 @@
 		<liferay-ui:search-container-column-date
 			name="create-date"
 			property="createDate"
+		/>
+
+		<%-- Workflow status --%>
+		<liferay-ui:search-container-column-status
+			name="status"
 		/>
 
 		<liferay-ui:search-container-column-jsp
