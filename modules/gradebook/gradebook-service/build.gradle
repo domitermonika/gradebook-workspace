@@ -1,4 +1,5 @@
 dependencies {
+	compileOnly group: "com.liferay", name: "com.liferay.portal.configuration.metatype.api", version: "6.1.0"
 	compileOnly group: "com.liferay", name: "com.liferay.portal.search.api"
 	compileOnly group: "com.liferay", name: "com.liferay.portal.search.spi"
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
