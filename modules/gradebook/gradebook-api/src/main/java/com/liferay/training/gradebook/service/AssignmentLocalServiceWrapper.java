@@ -316,6 +316,18 @@ public class AssignmentLocalServiceWrapper
 	@Override
 	public java.util.List<com.liferay.training.gradebook.model.Assignment>
 		getAssignmentsByKeywords(
+			long groupId, String keywords, int start, int end, int status,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.training.gradebook.model.Assignment>
+					orderByComparator) {
+
+		return _assignmentLocalService.getAssignmentsByKeywords(
+			groupId, keywords, start, end, status, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.training.gradebook.model.Assignment>
+		getAssignmentsByKeywords(
 			long groupId, String keywords, int start, int end,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<com.liferay.training.gradebook.model.Assignment>
@@ -339,6 +351,14 @@ public class AssignmentLocalServiceWrapper
 	public long getAssignmentsCountByKeywords(long groupId, String keywords) {
 		return _assignmentLocalService.getAssignmentsCountByKeywords(
 			groupId, keywords);
+	}
+
+	@Override
+	public long getAssignmentsCountByKeywords(
+		long groupId, String keywords, int status) {
+
+		return _assignmentLocalService.getAssignmentsCountByKeywords(
+			groupId, keywords, status);
 	}
 
 	@Override
@@ -401,8 +421,7 @@ public class AssignmentLocalServiceWrapper
 	public com.liferay.training.gradebook.model.Assignment updateStatus(
 			long userId, long assignmentId, int status,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			   com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _assignmentLocalService.updateStatus(
 			userId, assignmentId, status, serviceContext);

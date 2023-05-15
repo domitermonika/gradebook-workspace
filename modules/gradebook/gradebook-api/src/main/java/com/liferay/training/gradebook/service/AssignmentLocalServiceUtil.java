@@ -17,7 +17,6 @@ package com.liferay.training.gradebook.service;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.training.gradebook.model.Assignment;
@@ -277,6 +276,14 @@ public class AssignmentLocalServiceUtil {
 	}
 
 	public static List<Assignment> getAssignmentsByKeywords(
+		long groupId, String keywords, int start, int end, int status,
+		OrderByComparator<Assignment> orderByComparator) {
+
+		return getService().getAssignmentsByKeywords(
+			groupId, keywords, start, end, status, orderByComparator);
+	}
+
+	public static List<Assignment> getAssignmentsByKeywords(
 		long groupId, String keywords, int start, int end,
 		OrderByComparator<Assignment> orderByComparator) {
 
@@ -297,6 +304,13 @@ public class AssignmentLocalServiceUtil {
 		long groupId, String keywords) {
 
 		return getService().getAssignmentsCountByKeywords(groupId, keywords);
+	}
+
+	public static long getAssignmentsCountByKeywords(
+		long groupId, String keywords, int status) {
+
+		return getService().getAssignmentsCountByKeywords(
+			groupId, keywords, status);
 	}
 
 	public static
@@ -351,7 +365,7 @@ public class AssignmentLocalServiceUtil {
 	public static Assignment updateStatus(
 			long userId, long assignmentId, int status,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		return getService().updateStatus(
 			userId, assignmentId, status, serviceContext);
